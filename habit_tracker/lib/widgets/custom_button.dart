@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
   final Color? backgroundColor;   // Custom background color (null = use theme color)
   final Color? textColor;         // Custom text color (null = white)
 
+  // ignore: use_super_parameters
   const CustomButton({
     Key? key,
     required this.text,           // Text is required

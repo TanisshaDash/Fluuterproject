@@ -1,9 +1,6 @@
  import 'package:flutter/material.dart';
 
-/// SHOW CONFIRMATION DIALOG
-/// 
-/// Call this function to show a confirmation dialog
-/// Returns Future<bool>: true if user confirms, false if they cancel
+
 Future<bool> showConfirmDialog(
   BuildContext context, {
   required String title,           // Dialog title (e.g., "Delete Habit?")
@@ -44,6 +41,7 @@ class ConfirmDialog extends StatelessWidget {
   final Color? confirmColor;
   final IconData? icon;
 
+  // ignore: use_super_parameters
   const ConfirmDialog({
     Key? key,
     required this.title,

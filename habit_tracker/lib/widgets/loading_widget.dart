@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
   // PROPERTIES
@@ -6,6 +6,8 @@ class LoadingWidget extends StatelessWidget {
   final double size;          // Size of the spinner (diameter)
   final Color? color;         // Color of the spinner (null = use theme color)
 
+  // ignore: duplicate_ignore
+  // ignore: use_super_parameters
   const LoadingWidget({
     Key? key,
     this.message,
@@ -58,9 +60,9 @@ class LoadingOverlay extends StatelessWidget {
   final String? message;
 
   const LoadingOverlay({
-    Key? key,
+    super.key,
     this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -81,10 +83,10 @@ class InlineLoading extends StatelessWidget {
   final double size;
 
   const InlineLoading({
-    Key? key,
+    super.key,
     this.color,
     this.size = 20,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

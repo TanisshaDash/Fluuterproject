@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 import '../providers/habit_provider.dart';
 import '../models/habit.dart';
 import '../widgets/widgets.dart';  // Import all our custom widgets!
+import 'habit_detail_screen.dart';  // Import the detail screen
 
 /// HOMESCREEN WIDGET
 /// This is NOW a StatefulWidget so we can load habits when the screen first appears
@@ -37,8 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Load habits from storage when screen first appears
-    // We use addPostFrameCallback to ensure widget tree is built first
+    // Load habits AFTER first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<HabitProvider>().loadHabits();
     });
@@ -202,36 +202,47 @@ class HabitCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),  // Space between cards
-      child: ListTile(
-        // LEADING: Checkbox on the left side
-        leading: Checkbox(
-          value: isCompleted,
-          onChanged: (_) {
-            // When checkbox is tapped, toggle completion status
-            context.read<HabitProvider>().toggleHabitCompletion(habit.id);
-          },
-          shape: const CircleBorder(),  // Make checkbox circular
-        ),
-        
-        // TITLE: Habit name
-        title: Text(
-          habit.name,
-          style: TextStyle(
-            // Strike through text if completed
-            decoration: isCompleted ? TextDecoration.lineThrough : null,
-            fontWeight: FontWeight.w600,
+      child: InkWell(
+        // TAP ANYWHERE ON CARD TO VIEW DETAILS
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HabitDetailScreen(habit: habit),
+            ),
+          );
+        },
+        child: ListTile(
+          // LEADING: Checkbox on the left side
+          leading: Checkbox(
+            value: isCompleted,
+            onChanged: (_) {
+              // When checkbox is tapped, toggle completion status
+              context.read<HabitProvider>().toggleHabitCompletion(habit.id);
+            },
+            shape: const CircleBorder(),  // Make checkbox circular
           ),
-        ),
-        
-        // SUBTITLE: Description (only shown if it exists)
-        subtitle: habit.description != null
-            ? Text(habit.description!)
-            : null,  // Don't show subtitle if no description
-        
-        // TRAILING: Three-dot menu button on the right
-        trailing: IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () => _showOptions(context),
+          
+          // TITLE: Habit name
+          title: Text(
+            habit.name,
+            style: TextStyle(
+              // Strike through text if completed
+              decoration: isCompleted ? TextDecoration.lineThrough : null,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          
+          // SUBTITLE: Description (only shown if it exists)
+          subtitle: habit.description != null
+              ? Text(habit.description!)
+              : null,  // Don't show subtitle if no description
+          
+          // TRAILING: Three-dot menu button on the right
+          trailing: IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => _showOptions(context),
+          ),
         ),
       ),
     );
@@ -244,7 +255,7 @@ class HabitCard extends StatelessWidget {
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      builder: (context) => Wrap(
+      builder: (sheetContext) => Wrap(
         children: [
           // DELETE OPTION
           // Now with confirmation dialog!
@@ -255,8 +266,11 @@ class HabitCard extends StatelessWidget {
               style: TextStyle(color: Colors.red),
             ),
             onTap: () async {
+              // IMPORTANT: Get provider BEFORE closing bottom sheet
+              final provider = context.read<HabitProvider>();
+              
               // Close the bottom sheet first
-              Navigator.pop(context);
+              Navigator.pop(sheetContext);
               
               // Show confirmation dialog using our custom widget!
               final confirmed = await showDeleteConfirmation(
@@ -266,7 +280,7 @@ class HabitCard extends StatelessWidget {
               
               // Only delete if user confirmed
               if (confirmed) {
-                context.read<HabitProvider>().deleteHabit(habit.id);
+                provider.deleteHabit(habit.id);
               }
             },
           ),

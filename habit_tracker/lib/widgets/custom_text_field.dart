@@ -19,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;       // Called when text changes
   final bool readOnly;                     // Make field read-only
 
+  // ignore: use_super_parameters
   const CustomTextField({
     Key? key,
     required this.controller,

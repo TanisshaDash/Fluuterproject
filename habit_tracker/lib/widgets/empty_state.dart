@@ -8,6 +8,7 @@ class EmptyState extends StatelessWidget {
   final String? actionText;      // Optional button text (e.g., "Get Started")
   final VoidCallback? onAction;  // Function to call when button pressed
 
+  // ignore: use_super_parameters
   const EmptyState({
     Key? key,
     required this.icon,

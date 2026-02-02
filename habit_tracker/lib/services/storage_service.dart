@@ -1,3 +1,4 @@
+ // ignore: dangling_library_doc_comments
  /// STORAGE SERVICE
 /// 
 /// Handles saving and loading habit data to/from device storage.
@@ -24,6 +25,7 @@
 ///   shared_preferences: ^2.2.2
 
 import 'dart:convert';
+// ignore: depend_on_referenced_packages
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/habit.dart';
 
@@ -60,10 +62,12 @@ class StorageService {
       // Save the JSON string to storage with our key
       final success = await prefs.setString(_habitsKey, jsonString);
       
+      // ignore: avoid_print
       print('✅ Saved ${habits.length} habits to storage');
       return success;
     } catch (e) {
       // If something goes wrong, log the error
+      // ignore: avoid_print
       print('❌ Error saving habits: $e');
       return false;
     }
@@ -93,6 +97,7 @@ class StorageService {
       
       // If no data saved yet, return empty list
       if (jsonString == null) {
+        // ignore: avoid_print
         print('ℹ️ No saved habits found (first time?)');
         return [];
       }
@@ -105,10 +110,12 @@ class StorageService {
           .map((json) => Habit.fromJson(json as Map<String, dynamic>))
           .toList();
       
+      // ignore: avoid_print
       print('✅ Loaded ${habits.length} habits from storage');
       return habits;
     } catch (e) {
       // If something goes wrong, log error and return empty list
+      // ignore: avoid_print
       print('❌ Error loading habits: $e');
       return [];
     }
@@ -126,9 +133,11 @@ class StorageService {
       final prefs = await SharedPreferences.getInstance();
       final success = await prefs.remove(_habitsKey);
       
+      // ignore: avoid_print
       print('✅ Cleared all habits from storage');
       return success;
     } catch (e) {
+      // ignore: avoid_print
       print('❌ Error clearing habits: $e');
       return false;
     }
@@ -146,6 +155,7 @@ class StorageService {
       final prefs = await SharedPreferences.getInstance();
       return prefs.containsKey(_habitsKey);
     } catch (e) {
+      // ignore: avoid_print
       print('❌ Error checking storage: $e');
       return false;
     }

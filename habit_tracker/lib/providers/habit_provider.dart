@@ -16,8 +16,10 @@ class HabitProvider extends ChangeNotifier {
     try {
       // Load habits from storage
       _habits = await StorageService.loadHabits();
+      // ignore: avoid_print
       print('📱 Loaded ${_habits.length} habits from storage');
     } catch (e) {
+      // ignore: avoid_print
       print('❌ Error loading habits: $e');
       _habits = [];  // Start with empty list if error
     }
@@ -30,11 +32,11 @@ class HabitProvider extends ChangeNotifier {
     await StorageService.saveHabits(_habits);
   }
 
-   void addHabit(Habit habit) {
-    _habits.add(habit);
-    _saveHabits();      // 💾 AUTO-SAVE!
-    notifyListeners();  // IMPORTANT: This tells Flutter to rebuild widgets using this data
-  }
+void addHabit(Habit habit) {
+  _habits.add(habit);
+  _saveHabits();
+  notifyListeners(); // ✅ Good - inside a method
+}
   // Toggle habit completion for today
 void toggleHabitCompletion(String habitId) {
     // Find the index of the habit with this ID
